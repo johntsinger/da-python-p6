@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,9 +9,7 @@
     <body>
         <header class="header">
             <div class="logo">
-                <a href="#">
-                    <img src="images/logo_dark.png" alt="Logo JustStreamIt">
-                </a>
+                <a href="#"><img src="images/logo_dark.png" alt="Logo JustStreamIt"></a>
             </div>
             <nav class="navbar">
                 <ul class="navbar-nav">
@@ -20,22 +18,56 @@
                 </ul>
             </nav>
         </header>
-        <section class="best-movie">
-
-            <div class="best-movie--cover">
-                <img src="" alt="Best movie cover" id="best-movie-img">
-            </div>
-            <div id="title-buttons">
-                <div class="best-movie--title">
-                    <h1 id="best-movie-title"></h1>
+        <section>
+            <div class="container">
+                <div class="best-movie-content">
+                    <div class="best-movie--title">
+                        <h1 id="best-movie-title"></h1>
+                    </div>
+                    <div class="description" id="best-movie-description"></div>
+                    <div class="button">
+                        <button type="button" class="btn">Play</button>
+                        <button type="button" class="btn">Info</button>
+                    </div>
                 </div>
-                <div class="button">
-                    <button type="button" class="btn">Play</button>
-                    <button type="button" class="btn">Info</button>
+                <div class="best-movie--cover">
+                    <img src="" alt="Best movie cover" id="">
                 </div>
-                <div class="description" id="best-movie-description"></div>
             </div>
         </section>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close">&times;</span>
+                    <h2 id="title"></h2>
+                    <p id="year"></p>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-image">
+                        <img src="" id="image-url">
+                    </div>
+                    <div class="data">
+                        <p id="duration"></p>
+                        <p id="countries"></p>
+                        <p id="genres"></p>
+                        <p id="rated"></p>
+                        <p id="imdb-score"></p>
+                    </div>
+                    <div class="data-persons">
+                        <p id="directors"></p>
+                        <p id="actors"></p>
+                    </div>
+                    <div class="results">
+                        <p id="box-office"></p>
+                    </div>
+                    <div class="description">
+                        <p id="plot"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
         <script src="scripts/api.js"></script>
     </body>

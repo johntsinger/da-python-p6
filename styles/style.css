@@ -1,14 +1,14 @@
+/*header*/
+
 .header {
-    display: flex;
+    display: inline-flex;
     flex-direction: row;
     background-color: #333;
     width: 100%;
     height: 50px;
-    align-items: stretch;
 }
 
 .logo {
-    align-items: stretch;
     padding: 2px;
     padding-right: 30px;
 }
@@ -19,13 +19,10 @@
 }
 
 .navbar-nav {
+    display: flex;
     list-style: none;
     margin: 0;
     padding: 0;
-}
-
-li {
-    float: left;
     font-size: 20px;
 }
 
@@ -37,11 +34,122 @@ li {
     text-decoration: none;
 }
 
-section {
+/* best movies */
+
+.container {
+    margin: 15px;
     display: flex;
     flex-direction: row;
 }
 
+.best-movie-content {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.button {
+    margin-top: 15px;
+}
+
+.btn {
+    margin-right: 15px;
+    width: 60px;
+    height: 24px;
+    border: 1px solid black;
+    border-radius: 15px;
+}
+
+.btn:hover, .btn:focus {
+    cursor: pointer;
+    background-color: lightgrey;
+}
+
 #title-buttons {
     flex-direction: column;
+}
+
+/* modal */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    display: table; /* to make modal fit the image */
+    background-color: #fefefe;
+    position: relative;
+    margin: auto;
+    padding: 0;
+    border: 1px solid black;
+    width: 50%;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+.close {
+    color: white;
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.close:hover {
+    color: red;
+    cursor: pointer;
+}
+
+.modal-header {
+    height: 50px;
+    padding: 2px 16px;
+    background-color: grey;
+    color: white;
+    text-align: center;
+}
+
+.modal-body {
+    padding: 8px 16px;
+}
+
+.modal-image {
+    height: 100%;
+    float: right;
+    margin-bottom: 4px;
+}
+
+.modal-header h2, .modal-header p {
+    margin: 0;
+}
+
+.data p {
+    display: inline;
+    margin-right: 20px;
+}
+
+.data-persons {
+    width: 80%;
 }
