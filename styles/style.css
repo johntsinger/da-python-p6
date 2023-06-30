@@ -47,6 +47,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 .button {
@@ -150,6 +151,6 @@
     margin-right: 20px;
 }
 
-.data-persons {
+.data-persons, .description{
     width: 80%;
 }

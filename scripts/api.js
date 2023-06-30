@@ -10,7 +10,7 @@ function getBestMovie() {
                 .innerHTML = data["title"];
             getDescription(data["url"]);
             document.getElementsByClassName("btn")[1]
-                .setAttribute("onclick", `openModal("${data["id"]}")`) // template literals
+                .setAttribute("onclick", `openModal("${data["id"]}")`); // template literals
         })
         .catch((err) => console.log(err.message));
 }
@@ -58,7 +58,7 @@ function getModalData(id) {
             }
             document.getElementById("plot")
                 .innerHTML = data["long_description"];
-        })
+        });
 
 }
 
@@ -66,7 +66,7 @@ function openModal(id) {
     let modal = document.getElementById("myModal");
     let span = document.getElementsByClassName("close")[0];
     modal.style.display = "block";
-    getModalData(id)
+    getModalData(id);
 
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
@@ -79,6 +79,10 @@ function openModal(id) {
             modal.style.display = "none";
         }
     }
+}
+
+function getMoviesByCategory(categorie) {
+    
 }
 
 getBestMovie()
