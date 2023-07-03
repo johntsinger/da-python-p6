@@ -1,5 +1,16 @@
-const url = "http://127.0.0.1:8000/api/v1/titles/"
+const url = "http://127.0.0.1:8000/api/v1/titles/";
 
+const getData = async (url, params) => {
+    try {
+        return await axios.get(url, {
+            params: params
+        });
+    } catch (error) {
+        console.log(error.response.data);
+    }
+}
+
+/*
 const getData = async (url, endpoint="") => {
     try {
         return await axios.get(url + endpoint);
@@ -7,26 +18,24 @@ const getData = async (url, endpoint="") => {
         console.log(error.response.data.error);
     }
 }
+*/
 
-async function bestMovie(endpoint) {
-    let movie = (await getData(url, endpoint)).data.results[0];
-    document.getElementsByClassName("best-movie--cover")[0].getElementsByTagName("img")[0]
+async function bestMovie() {
+    let params = {sort_by: "-imdb_score"}
+    let movie = (await getData(url, params)).data.results[0];
+    document.getElementsByClassName("best-movie--cover")[0]
+        .getElementsByTagName("img")[0]
         .src = movie.image_url;
     document.getElementById("best-movie-title")
         .innerHTML = movie.title;
-    bestMovieDescription(movie.url);
+    document.getElementById("best-movie-description")
+        .innerHTML = (await getData(movie.url)).data.description;
     document.getElementsByClassName("btn")[1]
         .setAttribute("onclick", `openModal("${movie.id}")`); // template literals
 }
 
-async function bestMovieDescription(url) {
-    let movieData = (await getData(url)).data;
-    document.getElementById("best-movie-description")
-        .innerHTML = movieData.description;
-}
-
 async function modalData(id) {
-    let movieData = (await getData(url, id)).data;
+    let movieData = (await getData(url + id)).data;
     document.getElementById("title")
         .innerHTML = movieData.title;
     document.getElementById("year")
@@ -77,12 +86,35 @@ function openModal(id) {
     }
 }
 
-async function getMoviesByCategory(categorie) {
-    
+async function moviesByCategory(category, numberOfItems) {
+    let page = 1;
+    let params = {sort_by: "-imdb_score", genre: category, page: page};
+    let movies = [];
+    while (movies.length < numberOfItems) {
+        let moviesOnPage = (await getData(url, params)).data.results;
+        movies = movies.concat(moviesOnPage.slice(0, numberOfItems - movies.length));
+        page++;
+    }
+    return movies;
 }
 
-function main () {
-    bestMovie("?sort_by=-imdb_score");
+async function populateSlider(category, numberOfItems) {
+    let movies = await(moviesByCategory(category, numberOfItems));
+    let slider = document.querySelector(".slider");
+    movies.forEach((movie) => {
+        let image = movie.image_url;
+        const newMovie = document.getElementById("movie0");
+        let clone = newMovie.cloneNode(true);
+        let img = clone.querySelector("img");
+        img.src = image;
+        slider.insertBefore(clone, slider.childNodes[slider.childNodes.length - 1]);
+    });
+}
+
+async function main () {
+    await bestMovie();
+    await moviesByCategory("drama", 7);
+    await populateSlider("drama", 7);
 }
 
 main();
