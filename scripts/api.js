@@ -1,72 +1,68 @@
 const url = "http://127.0.0.1:8000/api/v1/titles/"
 
-function getBestMovie() {
-    axios.get(url + "?sort_by=-imdb_score")
-        .then(response => response["data"]["results"][0])
-        .then(data => {
-            document.getElementsByClassName("best-movie--cover")[0].getElementsByTagName("img")[0]
-                .src = data["image_url"];
-            document.getElementById("best-movie-title")
-                .innerHTML = data["title"];
-            getDescription(data["url"]);
-            document.getElementsByClassName("btn")[1]
-                .setAttribute("onclick", `openModal("${data["id"]}")`); // template literals
-        })
-        .catch((err) => console.log(err.message));
+const getData = async (url, endpoint="") => {
+    try {
+        return await axios.get(url + endpoint);
+    } catch (error) {
+        console.log(error.response.data.error);
+    }
 }
 
-function getDescription(url) {
-    axios.get(url)
-        .then(response => response["data"])
-        .then(data => {
-            document.getElementById("best-movie-description")
-                .innerHTML = data["description"];
-        })
-        .catch((err) => console.log(err.message));
+async function bestMovie(endpoint) {
+    let movie = (await getData(url, endpoint)).data.results[0];
+    document.getElementsByClassName("best-movie--cover")[0].getElementsByTagName("img")[0]
+        .src = movie.image_url;
+    document.getElementById("best-movie-title")
+        .innerHTML = movie.title;
+    bestMovieDescription(movie.url);
+    document.getElementsByClassName("btn")[1]
+        .setAttribute("onclick", `openModal("${movie.id}")`); // template literals
 }
 
-function getModalData(id) {
-    axios.get(url + id)
-        .then(response => response["data"])
-        .then(data => {
-            document.getElementById("title")
-                .innerHTML = data["title"];
-            document.getElementById("year")
-                .innerHTML = " (" + data["year"] + ")";
-            document.getElementById("image-url")
-                .src = data["image_url"];
-            document.getElementById("duration")
-                .innerHTML = data["duration"] + " min";
-            document.getElementById("countries")
-                .innerHTML = data["countries"].join(", ");
-            document.getElementById("genres")
-                .innerHTML = data["genres"].join(", ");
-            document.getElementById("rated")
-                .innerHTML = data["rated"];
-            document.getElementById("imdb-score")
-                .innerHTML = "IMDb score : " + data["imdb_score"];
-            document.getElementById("directors")
-                .innerHTML = "Directed by : " + data["directors"].join(", ");
-            document.getElementById("actors")
-                .innerHTML = "Casting : " + data["actors"].join(", ");
-            if (data["worldwide_gross_income"] == null) {
-                document.getElementById("box-office")
-                    .innerHTML = "Box office : " + "N/A";
-            } else {
-                document.getElementById("box-office")
-                    .innerHTML = "Box office : " + data["worldwide_gross_income"];
-            }
-            document.getElementById("plot")
-                .innerHTML = data["long_description"];
-        });
+async function bestMovieDescription(url) {
+    let movieData = (await getData(url)).data;
+    document.getElementById("best-movie-description")
+        .innerHTML = movieData.description;
+}
 
+async function modalData(id) {
+    let movieData = (await getData(url, id)).data;
+    document.getElementById("title")
+        .innerHTML = movieData.title;
+    document.getElementById("year")
+        .innerHTML = " (" + movieData.year + ")";
+    document.getElementById("image-url")
+        .src = movieData.image_url;
+    document.getElementById("duration")
+        .innerHTML = movieData.duration + " min";
+    document.getElementById("countries")
+        .innerHTML = movieData.countries.join(", ");
+    document.getElementById("genres")
+        .innerHTML = movieData.genres.join(", ");
+    document.getElementById("rated")
+        .innerHTML = movieData.rated;
+    document.getElementById("imdb-score")
+        .innerHTML = "IMDb score : " + movieData.imdb_score;
+    document.getElementById("directors")
+        .innerHTML = "Directed by : " + movieData.directors.join(", ");
+    document.getElementById("actors")
+        .innerHTML = "Casting : " + movieData.actors.join(", ");
+    if (movieData.worldwide_gross_income == null) {
+        document.getElementById("box-office")
+            .innerHTML = "Box office : " + "N/A";
+    } else {
+        document.getElementById("box-office")
+            .innerHTML = "Box office : " + movieData.worldwide_gross_income;
+    }
+    document.getElementById("plot")
+        .innerHTML = movieData.long_description;
 }
 
 function openModal(id) {
     let modal = document.getElementById("myModal");
     let span = document.getElementsByClassName("close")[0];
     modal.style.display = "block";
-    getModalData(id);
+    modalData(id);
 
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
@@ -81,8 +77,12 @@ function openModal(id) {
     }
 }
 
-function getMoviesByCategory(categorie) {
+async function getMoviesByCategory(categorie) {
     
 }
 
-getBestMovie()
+function main () {
+    bestMovie("?sort_by=-imdb_score");
+}
+
+main();
