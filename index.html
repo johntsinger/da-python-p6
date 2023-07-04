@@ -4,6 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="styles/style.css">
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+        <script src="scripts/api.js" async></script>
         <title>JustStreamIt</title>
     </head>
     <body>
@@ -41,7 +43,7 @@
             <div class="slider" id="mySlider">
                 <div class="movie" id="movie0">
                     <img src="" alt="" srcset="">
-                    <div class="description">
+                    <div class="inner-description">
                         <div class="description__text-container">
                             <span class="description__text"></span>
                         </div>
@@ -49,6 +51,121 @@
                 </div>
             </div>
             <button type="button" id="moveRight" class="btn-nav">ᐅ</button>
+        </div>
+
+        <div class="container">
+            <div class="title">Test</div>
+
+            <div class="carousel">
+                <div class="carousel__panorama">
+                    <div class="item"></div>
+                    <div class="item"></div>
+                    <div class="item"></div>
+                    <div class="item"></div>
+                    <div class="item"></div>
+                </div>                
+            </div>
+
+            <div id="carousel1">
+                <div class="item">
+                    <div class="item__image">
+                        <img src="" alt="">
+                    </div>
+                    <div class="item__body">
+                        <div class="item__title">
+                            title 1
+                        </div>
+                        <div class="item__description">
+                            test description
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="item__image">
+                        <img src="" alt="">
+                    </div>
+                    <div class="item__body">
+                        <div class="item__title">
+                            title 2
+                        </div>
+                        <div class="item__description">
+                            test description
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="item__image">
+                        <img src="" alt="">
+                    </div>
+                    <div class="item__body">
+                        <div class="item__title">
+                            title 3
+                        </div>
+                        <div class="item__description">
+                            test description
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="item__image">
+                        <img src="" alt="">
+                    </div>
+                    <div class="item__body">
+                        <div class="item__title">
+                            title 4
+                        </div>
+                        <div class="item__description">
+                            test description
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="item__image">
+                        <img src="" alt="">
+                    </div>
+                    <div class="item__body">
+                        <div class="item__title">
+                            title 5
+                        </div>
+                        <div class="item__description">
+                            test description
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="item__image">
+                        <img src="" alt="">
+                    </div>
+                    <div class="item__body">
+                        <div class="item__title">
+                            title 6
+                        </div>
+                        <div class="item__description">
+                            test description
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="item__image">
+                        <img src="" alt="">
+                    </div>
+                    <div class="item__body">
+                        <div class="item__title">
+                            title 7
+                        </div>
+                        <div class="item__description">
+                            test description
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
         </div>
 
         <div id="myModal" class="modal">
@@ -82,8 +199,5 @@
                 </div>
             </div>
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
-        <script src="scripts/api.js"></script>
     </body>
 </html>

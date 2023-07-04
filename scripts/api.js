@@ -88,33 +88,118 @@ function openModal(id) {
 
 async function moviesByCategory(category, numberOfItems) {
     let page = 1;
-    let params = {sort_by: "-imdb_score", genre: category, page: page};
     let movies = [];
     while (movies.length < numberOfItems) {
+        let params = {sort_by: "-imdb_score", genre: category, page: page};
         let moviesOnPage = (await getData(url, params)).data.results;
         movies = movies.concat(moviesOnPage.slice(0, numberOfItems - movies.length));
         page++;
     }
+    console.log(movies)
     return movies;
+}
+
+async function addMovie(element, category, numberOfItems) {
+    let movies = await(moviesByCategory(category, numberOfItems));
+    let carousel = document.getElementById(element);
+    console.log(carousel);
+    for (let i=0; i<movies.length; i++) {
+        carousel.getElementsByTagName("img")[i]
+            .src = movies[i].image_url;
+    }
 }
 
 async function populateSlider(category, numberOfItems) {
     let movies = await(moviesByCategory(category, numberOfItems));
     let slider = document.querySelector(".slider");
-    movies.forEach((movie) => {
-        let image = movie.image_url;
+    for (let i=0; i<movies.length; i++) {
+        let image = movies[i].image_url;
         const newMovie = document.getElementById("movie0");
         let clone = newMovie.cloneNode(true);
         let img = clone.querySelector("img");
         img.src = image;
+        img.setAttribute("onclick", `openModal("${movies[i].id}")`);
+        clone.querySelector(".description__text")
+            .innerHTML = movies[i].title;
         slider.insertBefore(clone, slider.childNodes[slider.childNodes.length - 1]);
-    });
+    };
+    const initialMovie = document.getElementById("movie0");
+    initialMovie.remove();
 }
+
+
+class Carousel {
+    constructor (element, options = {}) {
+        this.element = element
+        this.options = Object.assign({}, {
+            slidesToScroll: 1,
+            slidesVisible: 1
+        }, options)
+        let children = [].slice.call(element.children)
+        this.currentItem = 0
+        this.root = this.createDivWithClass('carousel')
+        this.container = this.createDivWithClass('carousel__container')
+        this.root.appendChild(this.container)
+        this.element.appendChild(this.root)
+        this.items = children.map((child) => {
+            let item = this.createDivWithClass('carousel__item')
+            item.appendChild(child)
+            this.container.appendChild(item)
+            return item
+        })
+        this.setStyle()
+        this.createNavigation()
+    }
+
+    setStyle() {
+        let ratio = this.items.length / this.options.slidesVisible
+        this.container.style.width = (ratio * 100) + "%"
+        this.items.forEach(item => item.style.width = (100 / this.options.slidesVisible) / ratio + '%')
+    }
+
+    createNavigation () {
+        let nextButton = this.createDivWithClass('carousel__next')
+        let prevButton = this.createDivWithClass('carousel__prev')
+        this.root.appendChild(nextButton)
+        this.root.appendChild(prevButton)
+        nextButton.addEventListener('click', this.next.bind(this))
+        prevButton.addEventListener('click', this.prev.bind(this))
+    }
+
+    next () {
+        this.gotoItem(this.currentItem + this.options.slidesToScroll)
+    }
+
+    prev () {
+        this.gotoItem(this.currentItem - this.options.slidesToScroll)
+    }
+
+    gotoItem(index) {
+        this.currentItem = index
+    }
+
+    createDivWithClass(className) {
+        let div = document.createElement('div')
+        div.setAttribute('class', className)
+        return div
+    }
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    new Carousel(document.querySelector('#carousel1'), {
+        slidesToScroll: 3,
+        slidesVisible: 3
+    })
+})
+
+
 
 async function main () {
     await bestMovie();
     await moviesByCategory("drama", 7);
     await populateSlider("drama", 7);
+    await addMovie('carousel1', "drama", 7)
 }
 
 main();
