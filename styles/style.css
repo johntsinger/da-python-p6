@@ -51,25 +51,29 @@ body {
 /* best movies */
 
 .container__best-movie {
-    width: 100%;
+    width: 100vw;
     height: 400px;
     margin-bottom: 30px;
     display: flex;
     flex-direction: row;
+    justify-content: center;
     background: linear-gradient(90deg, rgba(53,2,2,1) 21%, rgba(0,0,0,0.8408613445378151) 98%);
 }
 
 .best-movie__cover {
-    width: 50%;
-
-    padding: 15px;
+    width: 300px;
+    margin-right: 20px;
     background-repeat: no-repeat;
     background-size: contain;
+    background-position: center;
+}
+
+#best-movie-title {
+    text-align: center;
 }
 
 .best-movie-content {
     color: white;
-    width: 50%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -188,7 +192,10 @@ body {
 .container {
     padding-left: 20px;
     padding-right: 20px;
-    height: 450px;
+    height: 550px;
+    width: 60%;
+    overflow: hidden;
+    margin: 0 auto;
 }
 
 .title {
@@ -214,7 +221,7 @@ body {
 .item img {
     display: block;
     width: 100%;
-    height: 250px;
+    height: 400px;
     object-fit: cover;
     border-radius: 15px;
 }
@@ -253,7 +260,6 @@ body {
 .carousel__container {
     transition: transform 0.3s;
     transform: translate3d(0, 0, 0);
-    height: 300px;
 }
 
 .carousel__container::after {

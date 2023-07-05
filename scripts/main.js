@@ -165,7 +165,7 @@ async function modalData(id) {
             .innerHTML = "Box office : " + "N/A";
     } else {
         document.getElementById("box-office")
-            .innerHTML = "Box office : " + movieData.worldwide_gross_income;
+            .innerHTML = "Box office : " + movieData.worldwide_gross_income + " $";
     }
     document.getElementById("plot")
         .innerHTML = movieData.long_description;
@@ -229,22 +229,22 @@ async function main () {
 main();
 document.addEventListener('DOMContentLoaded', function () {
     new Carousel(document.querySelector('#carousel1'), {
-        slidesToScroll: 2,
+        slidesToScroll: 3,
         slidesVisible: 4,
         loop: false
     });
     new Carousel(document.querySelector('#carousel2'), {
-        slidesToScroll: 2,
+        slidesToScroll: 3,
         slidesVisible: 4,
         loop: false
     });
     new Carousel(document.querySelector('#carousel3'), {
-        slidesToScroll: 2,
+        slidesToScroll: 3,
         slidesVisible: 4,
         loop: false
     });
     new Carousel(document.querySelector('#carousel4'), {
-        slidesToScroll: 2,
+        slidesToScroll: 3,
         slidesVisible: 4,
         loop: false
     });
