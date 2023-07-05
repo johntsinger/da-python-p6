@@ -1,5 +1,120 @@
 const url = "http://127.0.0.1:8000/api/v1/titles/";
 
+class Carousel {
+    constructor (element, options = {}) {
+        this.element = element
+        this.options = Object.assign({}, {
+            slidesToScroll: 1,
+            slidesVisible: 1,
+            loop: false
+        }, options)
+        let children = [].slice.call(element.children)
+        this.isMobile = false
+        this.currentItem = 0
+        this.moveCallbacks = []
+
+        // DOM modification
+        this.root = this.createDivWithClass('carousel')
+        this.container = this.createDivWithClass('carousel__container')
+        this.root.appendChild(this.container)
+        this.element.appendChild(this.root)
+        this.items = children.map((child) => {
+            let item = this.createDivWithClass('carousel__item')
+            item.appendChild(child)
+            this.container.appendChild(item)
+            return item
+        })
+        this.setStyle()
+        this.createNavigation()
+
+        // Events
+        this.moveCallbacks.forEach(callback => callback(0))
+        this.onWindowResize()
+        window.addEventListener('resize', this.onWindowResize.bind(this))
+
+    }
+
+    setStyle() {
+        let ratio = this.items.length / this.slidesVisible
+        this.container.style.width = (ratio * 100) + "%"
+        this.items.forEach(item => item.style.width = (100 / this.slidesVisible) / ratio + '%')
+    }
+
+    createNavigation () {
+        let nextButton = this.createDivWithClass('carousel__next')
+        let prevButton = this.createDivWithClass('carousel__prev')
+        this.root.appendChild(nextButton)
+        this.root.appendChild(prevButton)
+        nextButton.addEventListener('click', this.next.bind(this))
+        prevButton.addEventListener('click', this.prev.bind(this))
+        if (this.options.loop === true) {
+            return
+        }
+        this.onMove(index => {
+            if (index === 0) {
+                prevButton.classList.add('carousel__prev--hidden')
+            } else {
+                prevButton.classList.remove('carousel__prev--hidden')
+            }
+
+            if (this.items[this.currentItem + this.slidesVisible] === undefined) {
+                nextButton.classList.add('carousel__next--hidden')
+            } else {
+                nextButton.classList.remove('carousel__next--hidden')
+            }
+        })
+    }
+
+    next () {
+        this.gotoItem(this.currentItem + this.slidesToScroll)
+    }
+
+    prev () {
+        this.gotoItem(this.currentItem - this.slidesToScroll)
+    }
+
+    gotoItem(index) {
+        if (index < 0) {
+            index = this.items.length - this.options.slidesVisible
+        } else if (index >= this.items.length || (this.items[this.currentItem + this.options.slidesVisible] === undefined && index > this.currentItem)) {
+            index = 0
+        }
+        let translateX = index * -100 / this.items.length
+        this.container.style.transform = 'translate3d(' + translateX + '%, 0, 0)'
+        this.currentItem = index
+        this.moveCallbacks.forEach(callback => callback(index))
+    }
+
+    onMove(callback) {
+        this.moveCallbacks.push(callback)
+    }
+
+    onWindowResize() {
+        let mobile = window.innerWidth < 800
+        if (mobile !== this.isMobile) {
+            this.isMobile = mobile
+            this.setStyle()
+            this.moveCallbacks.forEach(callback => callback(this.currentItem))
+        }
+    }
+
+    createDivWithClass(className) {
+        let div = document.createElement('div')
+        div.setAttribute('class', className)
+        return div
+    }
+
+    get slidesToScroll () {
+        return this.isMobile ? 1 : this.options.slidesToScroll
+    }
+
+    get slidesVisible () {
+        return this.isMobile ? 1 : this.options.slidesVisible
+    }
+
+}
+
+
 const getData = async (url, params) => {
     try {
         return await axios.get(url, {
@@ -9,16 +124,6 @@ const getData = async (url, params) => {
         console.log(error.response.data);
     }
 }
-
-/*
-const getData = async (url, endpoint="") => {
-    try {
-        return await axios.get(url + endpoint);
-    } catch (error) {
-        console.log(error.response.data.error);
-    }
-}
-*/
 
 async function bestMovie() {
     let params = {sort_by: "-imdb_score"}
@@ -104,102 +209,23 @@ async function addMovie(element, category, numberOfItems) {
     let carousel = document.getElementById(element);
     console.log(carousel);
     for (let i=0; i<movies.length; i++) {
-        carousel.getElementsByTagName("img")[i]
-            .src = movies[i].image_url;
+        let image = carousel.getElementsByTagName("img")[i]
+        image.src = movies[i].image_url;
+        image.setAttribute("onclick", `openModal("${movies[i].id}")`);
     }
 }
-
-async function populateSlider(category, numberOfItems) {
-    let movies = await(moviesByCategory(category, numberOfItems));
-    let slider = document.querySelector(".slider");
-    for (let i=0; i<movies.length; i++) {
-        let image = movies[i].image_url;
-        const newMovie = document.getElementById("movie0");
-        let clone = newMovie.cloneNode(true);
-        let img = clone.querySelector("img");
-        img.src = image;
-        img.setAttribute("onclick", `openModal("${movies[i].id}")`);
-        clone.querySelector(".description__text")
-            .innerHTML = movies[i].title;
-        slider.insertBefore(clone, slider.childNodes[slider.childNodes.length - 1]);
-    };
-    const initialMovie = document.getElementById("movie0");
-    initialMovie.remove();
-}
-
-
-class Carousel {
-    constructor (element, options = {}) {
-        this.element = element
-        this.options = Object.assign({}, {
-            slidesToScroll: 1,
-            slidesVisible: 1
-        }, options)
-        let children = [].slice.call(element.children)
-        this.currentItem = 0
-        this.root = this.createDivWithClass('carousel')
-        this.container = this.createDivWithClass('carousel__container')
-        this.root.appendChild(this.container)
-        this.element.appendChild(this.root)
-        this.items = children.map((child) => {
-            let item = this.createDivWithClass('carousel__item')
-            item.appendChild(child)
-            this.container.appendChild(item)
-            return item
-        })
-        this.setStyle()
-        this.createNavigation()
-    }
-
-    setStyle() {
-        let ratio = this.items.length / this.options.slidesVisible
-        this.container.style.width = (ratio * 100) + "%"
-        this.items.forEach(item => item.style.width = (100 / this.options.slidesVisible) / ratio + '%')
-    }
-
-    createNavigation () {
-        let nextButton = this.createDivWithClass('carousel__next')
-        let prevButton = this.createDivWithClass('carousel__prev')
-        this.root.appendChild(nextButton)
-        this.root.appendChild(prevButton)
-        nextButton.addEventListener('click', this.next.bind(this))
-        prevButton.addEventListener('click', this.prev.bind(this))
-    }
-
-    next () {
-        this.gotoItem(this.currentItem + this.options.slidesToScroll)
-    }
-
-    prev () {
-        this.gotoItem(this.currentItem - this.options.slidesToScroll)
-    }
-
-    gotoItem(index) {
-        this.currentItem = index
-    }
-
-    createDivWithClass(className) {
-        let div = document.createElement('div')
-        div.setAttribute('class', className)
-        return div
-    }
-}
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    new Carousel(document.querySelector('#carousel1'), {
-        slidesToScroll: 3,
-        slidesVisible: 3
-    })
-})
-
-
 
 async function main () {
     await bestMovie();
     await moviesByCategory("drama", 7);
-    await populateSlider("drama", 7);
     await addMovie('carousel1', "drama", 7)
 }
 
 main();
+document.addEventListener("DOMContentLoaded", function () {
+    new Carousel(document.querySelector('#carousel1'), {
+        slidesToScroll: 2,
+        slidesVisible: 3,
+        loop: false
+    })
+})
