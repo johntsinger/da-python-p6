@@ -75,8 +75,8 @@ class Carousel {
 
     gotoItem(index) {
         if (index < 0) {
-            index = this.items.length - this.options.slidesVisible
-        } else if (index >= this.items.length || (this.items[this.currentItem + this.options.slidesVisible] === undefined && index > this.currentItem)) {
+            index = this.items.length - this.slidesVisible
+        } else if (index >= this.items.length || (this.items[this.currentItem + this.slidesVisible] === undefined && index > this.currentItem)) {
             index = 0
         }
         let translateX = index * -100 / this.items.length
@@ -128,9 +128,8 @@ const getData = async (url, params) => {
 async function bestMovie() {
     let params = {sort_by: "-imdb_score"}
     let movie = (await getData(url, params)).data.results[0];
-    document.getElementsByClassName("best-movie--cover")[0]
-        .getElementsByTagName("img")[0]
-        .src = movie.image_url;
+    document.getElementsByClassName('best-movie__cover')[0]
+        .style.backgroundImage = `url("${movie.image_url}")`;
     document.getElementById("best-movie-title")
         .innerHTML = movie.title;
     document.getElementById("best-movie-description")
@@ -194,38 +193,59 @@ function openModal(id) {
 async function moviesByCategory(category, numberOfItems) {
     let page = 1;
     let movies = [];
+    let bestMovie = (await getData(url, {sort_by: "-imdb_score"})).data.results[0];
     while (movies.length < numberOfItems) {
         let params = {sort_by: "-imdb_score", genre: category, page: page};
         let moviesOnPage = (await getData(url, params)).data.results;
+        if (moviesOnPage[0].title === bestMovie.title) {
+            moviesOnPage.shift();
+        }
         movies = movies.concat(moviesOnPage.slice(0, numberOfItems - movies.length));
         page++;
     }
-    console.log(movies)
     return movies;
 }
 
 async function addMovie(element, category, numberOfItems) {
     let movies = await(moviesByCategory(category, numberOfItems));
     let carousel = document.getElementById(element);
-    console.log(carousel);
+    carousel.parentNode.getElementsByClassName('title')[0].innerHTML = category ? 'Best ' + category : 'Best movies';
     for (let i=0; i<movies.length; i++) {
         let image = carousel.getElementsByTagName("img")[i]
         image.src = movies[i].image_url;
-        image.setAttribute("onclick", `openModal("${movies[i].id}")`);
+        image.setAttribute('onclick', `openModal("${movies[i].id}")`);
+        carousel.getElementsByClassName("item__title")[i].innerHTML = movies[i].title
     }
 }
 
 async function main () {
     await bestMovie();
-    await moviesByCategory("drama", 7);
-    await addMovie('carousel1', "drama", 7)
+    await addMovie('carousel1', '', 7);
+    await addMovie('carousel2', 'drama', 7);
+    await addMovie('carousel3', 'comedy', 7);
+    await addMovie('carousel4', 'sci-fi', 7);
 }
 
 main();
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', function () {
     new Carousel(document.querySelector('#carousel1'), {
         slidesToScroll: 2,
-        slidesVisible: 3,
+        slidesVisible: 4,
         loop: false
-    })
+    });
+    new Carousel(document.querySelector('#carousel2'), {
+        slidesToScroll: 2,
+        slidesVisible: 4,
+        loop: false
+    });
+    new Carousel(document.querySelector('#carousel3'), {
+        slidesToScroll: 2,
+        slidesVisible: 4,
+        loop: false
+    });
+    new Carousel(document.querySelector('#carousel4'), {
+        slidesToScroll: 2,
+        slidesVisible: 4,
+        loop: false
+    });
 })
