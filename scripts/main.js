@@ -121,13 +121,14 @@ const getData = async (url, params) => {
             params: params
         });
     } catch (error) {
-        console.log(error.response.data);
+        console.log(error.message);
     }
 }
 
 async function bestMovie() {
     let params = {sort_by: "-imdb_score"}
     let movie = (await getData(url, params)).data.results[0];
+    console.log("ok")
     document.getElementsByClassName('best-movie__cover')[0]
         .style.backgroundImage = `url("${movie.image_url}")`;
     document.getElementById("best-movie-title")
