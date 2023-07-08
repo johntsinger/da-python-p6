@@ -76,7 +76,9 @@ class Carousel {
     gotoItem(index) {
         if (index < 0) {
             index = this.items.length - this.slidesVisible
-        } else if (index >= this.items.length || (this.items[this.currentItem + this.slidesVisible] === undefined && index > this.currentItem)) {
+        } else if (index >= this.items.length
+                || (this.items[this.currentItem + this.slidesVisible] === undefined
+                && index > this.currentItem)) {
             index = 0
         }
         let translateX = index * -100 / this.items.length
@@ -122,13 +124,25 @@ const getData = async (url, params) => {
         });
     } catch (error) {
         console.log(error.message);
+        bodyIfError(error.message);
+        throw error;
     }
+}
+
+function bodyIfError(error) {
+    let body = document.getElementsByTagName('body')[0];
+    let pError = document.createElement('p');
+    body.innerHTML = "";
+    body.appendChild(pError);
+    pError.innerHTML = `An error has occured : ${error} !</br> Please check if server is online`
+    pError.style.color = 'white';
+    pError.style.textAlign = 'center'
+
 }
 
 async function bestMovie() {
     let params = {sort_by: "-imdb_score"}
     let movie = (await getData(url, params)).data.results[0];
-    console.log("ok")
     document.getElementsByClassName('best-movie__cover')[0]
         .style.backgroundImage = `url("${movie.image_url}")`;
     document.getElementById("best-movie-title")
@@ -220,11 +234,11 @@ async function addMovie(element, category, numberOfItems) {
 }
 
 async function main () {
-    await bestMovie();
-    await addMovie('carousel1', '', 7);
-    await addMovie('carousel2', 'drama', 7);
-    await addMovie('carousel3', 'comedy', 7);
-    await addMovie('carousel4', 'sci-fi', 7);
+    await Promise.all([await bestMovie(),
+    await addMovie('carousel1', '', 7),
+    await addMovie('carousel2', 'drama', 7),
+    await addMovie('carousel3', 'comedy', 7),
+    await addMovie('carousel4', 'sci-fi', 7)])
 }
 
 main();

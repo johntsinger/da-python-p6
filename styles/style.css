@@ -62,10 +62,25 @@ body {
 
 .best-movie__cover {
     width: 300px;
-    margin-right: 20px;
+    margin: 10px 20px 10px 0px;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
+}
+
+@media (width < 500px) {
+    .container__best-movie {
+        flex-direction: column-reverse;
+        height: auto;
+    }
+    .best-movie__cover, .best-movie-content {
+        height: 50%;
+        width: 100%;
+    }
+
+    .best-movie__cover {
+        min-height: 268px;
+    }
 }
 
 #best-movie-title {
@@ -79,6 +94,8 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .button {
