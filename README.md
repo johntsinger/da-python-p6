@@ -27,3 +27,7 @@ This requieres the api to be run locally. You can download it here [API OCMovies
 
 Make sure API is running.
 In the root folder, open `index.html`.
+
+#
+
+![website](images/website.jpeg)
