@@ -1,5 +1,59 @@
 const url = "http://127.0.0.1:8000/api/v1/titles/";
 
+class CarouselHTMLStructure {
+    constructor (element, options = {}) {
+        this.element = element
+        this.options = Object.assign({}, {
+             numberOfCarousels: 1,
+             numberOfItems: 3,
+        }, options)
+        this.createCarousel()
+    }
+
+    createDivWithClass(className) {
+        let div = document.createElement('div')
+        div.setAttribute('class', className)
+        return div
+    }
+
+    createCarousel() {
+        for (let i=0; i<this.options.numberOfCarousels; i++) {
+            let carousel = this.createContainer(i)
+            this.element.appendChild(carousel)
+        }
+    }
+
+    createContainer(name) {
+        let root = this.createDivWithClass('container')
+        let title = this.createDivWithClass('title')
+        let carousel = document.createElement('div')
+        carousel.setAttribute('id', `carousel${name}`)
+        root.appendChild(title)
+        for (let i=0; i<this.options.numberOfItems; i++) {
+            let item = this.createItem()
+            carousel.appendChild(item)
+            root.appendChild(carousel)
+        }
+        return root
+    }
+
+    createItem() {
+        let root = this.createDivWithClass('item')
+        let itemImage = this.createDivWithClass('item_image')
+        let img = document.createElement('img')
+        img.src = ''
+        img.alt = ''
+        itemImage.appendChild(img)
+        let itemBody = this.createDivWithClass('item__body')
+        let itemTitle = this.createDivWithClass('item__title')
+        itemBody.appendChild(itemTitle)
+        root.appendChild(itemImage)
+        root.appendChild(itemBody)
+        return root
+    }
+}
+
+
 class Carousel {
     constructor (element, options = {}) {
         this.element = element
@@ -116,28 +170,20 @@ class Carousel {
 
 }
 
-
 const getData = async (url, params) => {
-    try {
-        return await axios.get(url, {
-            params: params
-        });
-    } catch (error) {
-        console.log(error.message);
-        bodyIfError(error.message);
-        throw error;
-    }
+    return await axios.get(url, {
+        params: params
+    });
 }
 
 function bodyIfError(error) {
-    let body = document.getElementsByTagName('body')[0];
+    let body = document.body;
     let pError = document.createElement('p');
     body.innerHTML = "";
     body.appendChild(pError);
     pError.innerHTML = `An error has occured : ${error} !</br> Please check if server is online`
     pError.style.color = 'white';
     pError.style.textAlign = 'center'
-
 }
 
 async function bestMovie() {
@@ -234,15 +280,31 @@ async function addMovie(element, category, numberOfItems) {
 }
 
 async function main () {
-    await Promise.all([await bestMovie(),
-    await addMovie('carousel1', '', 7),
-    await addMovie('carousel2', 'drama', 7),
-    await addMovie('carousel3', 'comedy', 7),
-    await addMovie('carousel4', 'sci-fi', 7)])
+    try {
+        await Promise.all([bestMovie(),
+            addMovie('carousel0', '', 7),
+            addMovie('carousel1', 'drama', 7),
+            addMovie('carousel2', 'comedy', 7),
+            addMovie('carousel3', 'sci-fi', 7)])
+    } catch(e) {
+        console.log(e.message);
+        bodyIfError(e.message);
+    }
 }
 
 main();
+
 document.addEventListener('DOMContentLoaded', function () {
+    new CarouselHTMLStructure(document.body, {
+        numberOfCarousels: 4,
+        numberOfItems: 7,
+    });
+
+    new Carousel(document.querySelector('#carousel0'), {
+        slidesToScroll: 3,
+        slidesVisible: 4,
+        loop: false
+    });
     new Carousel(document.querySelector('#carousel1'), {
         slidesToScroll: 3,
         slidesVisible: 4,
@@ -258,9 +320,4 @@ document.addEventListener('DOMContentLoaded', function () {
         slidesVisible: 4,
         loop: false
     });
-    new Carousel(document.querySelector('#carousel4'), {
-        slidesToScroll: 3,
-        slidesVisible: 4,
-        loop: false
-    });
-})
+});
