@@ -26,8 +26,13 @@ This requieres the api to be run locally. You can download it here [API OCMovies
 ## Access the page :
 
 Make sure API is running.
+
 In the root folder, open `index.html`.
 
 #
 
 ![website](images/website.jpeg)
+
+## Contact :
+Jonathan Singer - john.t.singer@gmail.com\
+Project link : https://github.com/johntsinger/da-python-p6
