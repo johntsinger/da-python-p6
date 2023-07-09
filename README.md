@@ -29,8 +29,6 @@ Make sure API is running.
 
 In the root folder, open `index.html`.
 
-#
-
 ![website](images/website.jpeg)
 
 ## Contact :
