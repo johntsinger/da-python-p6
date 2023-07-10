@@ -286,7 +286,7 @@ async function addMovie(element, category, numberOfItems) {
     }
 }
 
-async function main () {
+async function populateDOM () {
     try {
         await bestMovie();
         document.querySelector('.container__best-movie').style.display = 'flex'
@@ -301,7 +301,7 @@ async function main () {
     }
 }
 
-main();
+populateDOM();
 
 document.addEventListener('DOMContentLoaded', function () {
     new CarouselHtmlStructure(document.querySelector('.all-carousels'), {
