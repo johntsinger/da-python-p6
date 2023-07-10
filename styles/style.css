@@ -51,10 +51,10 @@ body {
 /* best movies */
 
 .container__best-movie {
+    display: none;
     width: 100vw;
     height: 400px;
     margin-bottom: 30px;
-    display: flex;
     flex-direction: row;
     justify-content: center;
     background: linear-gradient(90deg, rgba(53,2,2,1) 21%, rgba(0,0,0,0.8408613445378151) 98%);
@@ -143,17 +143,8 @@ body {
     padding: 0;
     border: 1px solid black;
     width: 50%;
-    -webkit-animation-name: animatetop;
-    -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
     animation-duration: 0.4s
-}
-
-/* Add Animation */
-
-@-webkit-keyframes animatetop {
-  from {top:-300px; opacity:0} 
-  to {top:0; opacity:1}
 }
 
 @keyframes animatetop {
@@ -206,6 +197,10 @@ body {
 }
 
 /* carousel */
+
+.all-carousels {
+    display: none;
+}
 
 .container {
     padding-left: 20px;

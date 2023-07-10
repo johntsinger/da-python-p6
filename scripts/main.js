@@ -8,6 +8,7 @@ class CarouselHTMLStructure {
              numberOfItems: 3,
         }, options)
         this.createCarousel()
+
     }
 
     createDivWithClass(className) {
@@ -172,18 +173,24 @@ class Carousel {
 
 const getData = async (url, params) => {
     return await axios.get(url, {
-        params: params
+        params: params,
+        headers: {
+            "Content-Type": "application/json"
+        }
     });
 }
 
 function bodyIfError(error) {
-    let body = document.body;
+    let body = document.querySelector('.container__best-movie');
+    body.style.display = 'flex'
     let pError = document.createElement('p');
     body.innerHTML = "";
+    body.style.alignItems = 'center'
     body.appendChild(pError);
     pError.innerHTML = `An error has occured : ${error} !</br> Please check if server is online`
     pError.style.color = 'white';
     pError.style.textAlign = 'center'
+    pError.style.verticalAlign = 'middle'
 }
 
 async function bestMovie() {
@@ -281,21 +288,23 @@ async function addMovie(element, category, numberOfItems) {
 
 async function main () {
     try {
-        await Promise.all([bestMovie(),
-            addMovie('carousel0', '', 7),
-            addMovie('carousel1', 'drama', 7),
-            addMovie('carousel2', 'comedy', 7),
-            addMovie('carousel3', 'sci-fi', 7)])
+        await bestMovie();
+        document.querySelector('.container__best-movie').style.display = 'flex'
+        await addMovie('carousel0', '', 7);
+        await addMovie('carousel1', 'drama', 7);
+        await addMovie('carousel2', 'comedy', 7);
+        await addMovie('carousel3', 'sci-fi', 7);
+        document.querySelector('.all-carousels').style.display = 'block'
     } catch(e) {
-        console.log(e.message);
         bodyIfError(e.message);
+        console.log(e.message);
     }
 }
 
 main();
 
 document.addEventListener('DOMContentLoaded', function () {
-    new CarouselHTMLStructure(document.body, {
+    new CarouselHTMLStructure(document.querySelector('.all-carousels'), {
         numberOfCarousels: 4,
         numberOfItems: 7,
     });
