@@ -1,6 +1,6 @@
 const url = "http://127.0.0.1:8000/api/v1/titles/";
 
-class CarouselHTMLStructure {
+class CarouselHtmlStructure {
     constructor (element, options = {}) {
         this.element = element
         this.options = Object.assign({}, {
@@ -19,27 +19,27 @@ class CarouselHTMLStructure {
 
     createCarousel() {
         for (let i=0; i<this.options.numberOfCarousels; i++) {
-            let carousel = this.createContainer(i)
-            this.element.appendChild(carousel)
+            let carouselContainer = this.createContainer(i)
+            this.element.appendChild(carouselContainer)
         }
     }
 
     createContainer(name) {
-        let root = this.createDivWithClass('container')
+        let container = this.createDivWithClass('container')
         let title = this.createDivWithClass('title')
         let carousel = document.createElement('div')
         carousel.setAttribute('id', `carousel${name}`)
-        root.appendChild(title)
+        container.appendChild(title)
         for (let i=0; i<this.options.numberOfItems; i++) {
             let item = this.createItem()
             carousel.appendChild(item)
-            root.appendChild(carousel)
+            container.appendChild(carousel)
         }
-        return root
+        return container
     }
 
     createItem() {
-        let root = this.createDivWithClass('item')
+        let item = this.createDivWithClass('item')
         let itemImage = this.createDivWithClass('item_image')
         let img = document.createElement('img')
         img.src = ''
@@ -48,9 +48,9 @@ class CarouselHTMLStructure {
         let itemBody = this.createDivWithClass('item__body')
         let itemTitle = this.createDivWithClass('item__title')
         itemBody.appendChild(itemTitle)
-        root.appendChild(itemImage)
-        root.appendChild(itemBody)
-        return root
+        item.appendChild(itemImage)
+        item.appendChild(itemBody)
+        return item
     }
 }
 
@@ -304,7 +304,7 @@ async function main () {
 main();
 
 document.addEventListener('DOMContentLoaded', function () {
-    new CarouselHTMLStructure(document.querySelector('.all-carousels'), {
+    new CarouselHtmlStructure(document.querySelector('.all-carousels'), {
         numberOfCarousels: 4,
         numberOfItems: 7,
     });
