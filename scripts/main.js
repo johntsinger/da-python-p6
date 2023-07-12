@@ -63,7 +63,7 @@ class Carousel {
             slidesVisible: 1,
             loop: false
         }, options)
-        let children = [].slice.call(element.children)
+        let children = [].slice.call(element.children) // convert node list to array
         this.isMobile = false
         this.currentItem = 0
         this.moveCallbacks = []
@@ -287,19 +287,25 @@ async function addMovie(element, category, numberOfItems) {
 }
 
 async function populateDOM () {
+    let bestMoviePromise = bestMovie();
+    let carousel0 = addMovie('carousel0', '', 7);
+    let carousel1 = addMovie('carousel1', 'drama', 7);
+    let carousel2 = addMovie('carousel2', 'comedy', 7);
+    let carousel3 = addMovie('carousel3', 'sci-fi', 7);
     try {
-        await bestMovie();
+        await bestMoviePromise;
         document.querySelector('.container__best-movie').style.display = 'flex'
-        await addMovie('carousel0', '', 7);
-        await addMovie('carousel1', 'drama', 7);
-        await addMovie('carousel2', 'comedy', 7);
-        await addMovie('carousel3', 'sci-fi', 7);
+        await carousel0;
+        await carousel1;
+        await carousel2;
+        await carousel3;
         document.querySelector('.all-carousels').style.display = 'block'
     } catch(e) {
         bodyIfError(e.message);
         console.log(e.message);
     }
 }
+
 
 populateDOM();
 
