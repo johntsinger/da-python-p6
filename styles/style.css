@@ -167,7 +167,7 @@ body {
 
 .modal-header {
     height: auto;
-    padding: 2px 16px;
+    padding: 4px 16px;
     background-color: grey;
     color: white;
     text-align: center;
@@ -227,8 +227,10 @@ body {
     border-radius: 15px;
 }
 
-.item:hover {
-    transform: translate3d(0, -10px, 0);
+@media (width > 800px) {
+    .item:hover {
+        transform: translate3d(0, -10px, 0);
+    }
 }
 
 .item img {
@@ -288,7 +290,7 @@ body {
     border-radius: 50%;
     top: 50%;
     margin-top: -20px;
-    right: 0px;
+    right: -5px;
     box-shadow: 0 15px 35px #3232321a,0 5px 15px #0000001a;
     cursor: pointer;
     transition: transform 0.3s, opacity 0.3s;
@@ -301,7 +303,7 @@ body {
 .carousel__prev {
     background-image: url(../images/prev-white.svg);
     right: auto;
-    left: -20px;
+    left: -5px;
 }
 
 .carousel__next--hidden, .carousel__prev--hidden {

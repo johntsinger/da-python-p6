@@ -63,7 +63,7 @@ class Carousel {
             slidesVisible: 1,
             loop: false
         }, options)
-        let children = [].slice.call(element.children) // convert node list to array
+        let children = [].slice.call(element.children) // convert NodeList to array
         this.isMobile = false
         this.currentItem = 0
         this.moveCallbacks = []
