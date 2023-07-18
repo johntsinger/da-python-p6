@@ -1,4 +1,4 @@
-# Python Application Developer - P4 - Develop a user interface for a Python web application
+# Python Application Developer - P6 - Develop a user interface for a Python web application
 
 ## Description
 
